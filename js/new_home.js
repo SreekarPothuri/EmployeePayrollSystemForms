@@ -1,13 +1,22 @@
+let empPayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
+    empPayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
+    localStorage.removeItem('editEmp');
 });
+
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ? 
+            JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+}
 
 //Template literal ES6 feature
 const createInnerHtml = () => {
+    if(empPayrollList.length == 0) return;
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th>" +
                         "<th>Salary</th><th>Start Date</th><th>Actions</th>";
     let innerHtml = `${headerHtml}`;
-    let empPayrollList = createEmployeePayrollJSON();
     for ( const empPayrollData of empPayrollList) {
         innerHtml = `${innerHtml}
         <tr>
@@ -16,47 +25,15 @@ const createInnerHtml = () => {
             <td>${empPayrollData._gender}</td>
             <td>${getDeptHtml(empPayrollData._department)}</td>
             <td>${empPayrollData._salary}</td>
-            <td>${empPayrollData._startDate}</td>
+            <td>${stringyfyDate(empPayrollData._startDate)}</td>
             <td>
-                <img name="${empPayrollData._id}" onclick="remove(this)" alt="delete" src="../assets/icons/delete-black-18dp.svg">
-                <img name="${empPayrollData._id}" onclick="update(this)" alt="edit" src="../assets/icons/create-black-18dp.svg">
+                <img id="${empPayrollData._id}" onclick="remove(this)" alt="delete" src="../assets/icons/delete-black-18dp.svg">
+                <img id="${empPayrollData._id}" onclick="update(this)" alt="edit" src="../assets/icons/create-black-18dp.svg">
             </td>
         </tr>
     `;
     }
         document.querySelector('#table-display').innerHTML = innerHtml;
-}
-
-const createEmployeePayrollJSON = () => {
-    let empPayrollListLocal = [
-        {
-            _name: 'Sreekar Pothuri',
-            _gender: 'male',
-            _department: [
-                'Engineering',
-                'Finance'
-            ],
-            _salary: '500000',
-            _startDate: '28 Oct 2018',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic: '../assets/profile-images/Ellipse -3.png'
-        },
-        {
-            _name: 'Naveen Pothuri',
-            _gender: 'male',
-            _department: [
-                'Engineering',
-                'HR'
-            ],
-            _salary: '400000',
-            _startDate: '22 Nov 2019',
-            _note: '',
-            _id: new Date().getTime() + 1,
-            _profilePic: '../assets/profile-images/Ellipse -2.png'
-        }
-    ];
-    return empPayrollListLocal;
 }
 
 const getDeptHtml = (deptList) => {
