@@ -48,6 +48,6 @@ class EmployeePayrollData {
     toString() {
         return "id=" + this.id + ", name=" + this.name + ", gender=" + this.gender +
             ", profilePic=" + this.profilePic + ", department=" + this.department +
-            ", salary=" + this.salary + ", startDate=" + this._startDate + ", note=" + this.note;
+            ", salary=" + this.salary + ", startDate=" + this.startDate + ", note=" + this.note;
     }
 }
